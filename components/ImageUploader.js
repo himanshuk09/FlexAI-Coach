@@ -6,6 +6,7 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google/generative-ai";
+import toast from "react-hot-toast";
 import MarkdownIt from "markdown-it";
 
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
@@ -16,6 +17,18 @@ const ImageTextPrompt = () => {
   const [imageBase64, setImageBase64] = useState("");
   const [textInput, setTextInput] = useState("");
   const [output, setOutput] = useState("");
+
+  const imageAnalysisPrompt = `
+  Analyze the uploaded image and determine the fitness level, body type, or health-related characteristics of the person. Based on the additional input provided: "${textInput}", generate a comprehensive response that includes:
+  
+  1. A personalized diet plan tailored to their fitness level and goals.
+  2. Key nutrition tips to enhance health and performance.
+  3. Recommended workout routines suitable for their body type or goals.
+  4. Motivational strategies to help them stay consistent and inspired.
+  5. General health tips, such as hydration, sleep, and stress management.
+  6. Any additional recommendations or guidance relevant to the image analysis and input.
+  `;
+
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -41,23 +54,24 @@ const ImageTextPrompt = () => {
 
   const handleGenerate = async () => {
     if (!imageBase64) {
-      alert("Please upload an image.");
+      toast.error("Please upload an image.");
       return;
     }
     if (!textInput) {
-      alert("Please enter a prompt.");
+      toast.error("Please enter a prompt.");
       return;
     }
+    console.log("called generater");
 
-    setLoading(true);
     setOutput(""); // Clear previous output
     try {
+      setLoading(true);
       const contents = [
         {
           role: "user",
           parts: [
             { inline_data: { mime_type: "image/jpeg", data: imageBase64 } },
-            { text: textInput },
+            { text: imageAnalysisPrompt },
           ],
         },
       ];
@@ -117,7 +131,7 @@ const ImageTextPrompt = () => {
       {/* Text Input */}
       <div className="mb-4">
         <label className="block font-semibold mb-2" htmlFor="textInput">
-          Enter Text Prompt
+          Ask me :
         </label>
         <textarea
           id="textInput"

@@ -1,4 +1,4 @@
-export default function CustomSelect({ label, id, values, type, setType }) {
+export default function CustomSelect({ label, id, values, value, onChange }) {
   return (
     <>
       <label htmlFor={id} className="block text-sm font-light leading-6">
@@ -8,8 +8,8 @@ export default function CustomSelect({ label, id, values, type, setType }) {
         <select
           id={id}
           name={id}
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          value={value}
+          onChange={onChange}
           className="block w-full rounded-md border-0 py-2 px-2 font-light shadow-sm ring-1 ring-inset ring-primary-light focus:ring-1 focus:ring-inset focus:ring-primary-main sm:max-w-xs sm:text-sm sm:leading-6 outline-primary-main"
         >
           {values.map(({ value, title }) => (

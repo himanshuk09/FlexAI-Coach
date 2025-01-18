@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-screen">
       <Head>
-        <title>FlexAI Coach</title>
+        <title>AI Fitness Trainer</title>
       </Head>
       <div className={"w-full flex-grow"}>
         <Header />

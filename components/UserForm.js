@@ -7,26 +7,29 @@ import toast from "react-hot-toast";
 import { geminiApiGenerateMsg } from "@/geminiAiServices";
 import ImageUploader from "./ImageUploader";
 import { useState } from "react";
-import {
-  GoogleGenerativeAI,
-  HarmCategory,
-  HarmBlockThreshold,
-} from "@google/generative-ai";
-import MarkdownIt from "markdown-it";
+
 export default function UserForm({ setData, setLoading, loading }) {
   const [type, setType] = useState("diet");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("male");
+  const [fitnessLevel, setFitnessLevel] = useState("beginner");
+  const [goal, setGoal] = useState("muscle-gain");
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent form submission and page reload
     setLoading(true);
+    console.log("handleSubmit");
 
     // Retrieve the form field values
-    const model = event.target.elements.model.value;
-    const height = event.target.elements.height.value;
-    const weight = event.target.elements.weight.value;
-    const age = event.target.elements.age.value;
-    const gender = event.target.elements.gender.value;
-    const fitnessLevel = event.target.elements.fitnessLevel.value;
-    const goal = event.target.elements.goal.value;
+    // const model = event.target.elements.model?.value;
+    // const height = event.target.elements.height?.value;
+    // const weight = event.target.elements.weight?.value;
+    // const age = event.target.elements.age?.value;
+    // const gender = event.target.elements.gender?.value;
+    // const fitnessLevel = event.target.elements.fitnessLevel?.value;
+    // const goal = event.target.elements.goal?.value;
 
     // Create an object with the form values
     const formData = {
@@ -36,7 +39,6 @@ export default function UserForm({ setData, setLoading, loading }) {
       gender,
       fitnessLevel,
       goal,
-      model,
     };
 
     let response = await geminiApiGenerateMsg(formData);
@@ -53,13 +55,14 @@ export default function UserForm({ setData, setLoading, loading }) {
       toast.error("Failed To Generate");
     }
   };
-  console.log(type);
+  console.log("type", type);
+  console.log("height", height);
 
   return (
-    <form
+    <div
       className="w-full my-10 mt-6 p-4 border border-gray-100 rounded-xl shadow-md"
-      onSubmit={handleSubmit}
-      autoComplete={"off"}
+      // onSubmit={handleSubmit}
+      // autoComplete={"off"}
     >
       <div className="flex flex-wrap -mx-3 mb-2">
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
@@ -67,8 +70,8 @@ export default function UserForm({ setData, setLoading, loading }) {
             id={"model"}
             label={"Select Type"}
             values={AI_SOURCES}
-            setType={setType}
-            type={type}
+            value={type}
+            onChange={(e) => setType(e.target.value)}
           />
         </div>
       </div>
@@ -81,18 +84,39 @@ export default function UserForm({ setData, setLoading, loading }) {
         <>
           <div className="flex flex-wrap -mx-3 mb-3">
             <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-              <InputText label={"Height (cm)"} id={"height"} />
+              <InputText
+                label={"Height (cm)"}
+                id={"height"}
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+              />
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-              <InputText label={"Weight (kg)"} id={"weight"} />
+              <InputText
+                label={"Weight (kg)"}
+                id={"weight"}
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+              />
             </div>
             <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-              <InputText label={"Age (yr)"} id={"age"} />
+              <InputText
+                label={"Age (yr)"}
+                id={"age"}
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
             </div>
           </div>
           <div className="flex flex-wrap -mx-3 mb-2">
             <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-              <CustomSelect id={"gender"} label={"Gender"} values={GENDERS} />
+              <CustomSelect
+                id={"gender"}
+                label={"Gender"}
+                values={GENDERS}
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              />
             </div>
 
             <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
@@ -100,16 +124,25 @@ export default function UserForm({ setData, setLoading, loading }) {
                 id={"fitnessLevel"}
                 label={"Fitness Level"}
                 values={FITNESS_LEVELS}
+                value={fitnessLevel}
+                onChange={(e) => setFitnessLevel(e.target.value)}
               />
             </div>
 
             <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-              <CustomSelect id={"goal"} label={"Goal"} values={GOALS} />
+              <CustomSelect
+                id={"goal"}
+                label={"Goal"}
+                values={GOALS}
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+              />
             </div>
           </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">
             <button
               type="submit"
+              onClick={handleSubmit}
               disabled={loading}
               className="rounded-md bg-primary-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark disabled:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
@@ -131,6 +164,6 @@ export default function UserForm({ setData, setLoading, loading }) {
           </div>
         </div>
       )}
-    </form>
+    </div>
   );
 }

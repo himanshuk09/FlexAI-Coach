@@ -7,7 +7,7 @@ export default function Header() {
             "inline-block text-transparent bg-clip-text text-5xl font-bold bg-gradient-to-r from-[#d946ef] to-[#0ea5e9]"
           }
         >
-          FlexAI Coach
+          AI Fitness Trainer
         </h1>
       </div>
     </div>
