@@ -166,8 +166,12 @@ const ImageTextPrompt = () => {
       )}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50">
-          <div className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg rounded-md p-4 ring-1 ring-inset ring-primary-light">
-            Loading...
+          <div className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg ">
+            <div class="flex justify-center items-center h-screen">
+              <div class="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-purple-500"></div>
+              <div class="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-red-500 ml-3"></div>
+              <div class="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-blue-500 ml-3"></div>
+            </div>
           </div>
         </div>
       )}
