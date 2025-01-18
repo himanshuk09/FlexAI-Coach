@@ -96,6 +96,3 @@ export const geminiApiGenerateMsg = (formData) => {
   let prompt = generatePrompt(formData);
   return runChat(prompt);
 };
-
-// .......................
-const GeminiApiGenerateMSgFromImage = () => {};

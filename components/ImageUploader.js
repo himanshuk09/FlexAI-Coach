@@ -1,48 +1,3 @@
-// import Head from "next/head";
-// import React, { useState } from "react";
-
-// export default function ImageUploader() {
-//   const [selectedImage, setSelectedImage] = useState(null);
-
-//   const [extractedInfo, setExtractedInfo] = useState("");
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onload = () => setSelectedImage(reader.result);
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center md:flex-row md:items-start gap-6">
-//       {/* Upload Button */}
-
-//       <label className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg   rounded-md p-1 ring-1 ring-inset ring-primary-light">
-//         Upload Image
-//         <input
-//           type="file"
-//           accept="image/*"
-//           onChange={handleImageChange}
-//           className="hidden"
-//         />
-//       </label>
-
-//       {/* Image Preview */}
-//       {selectedImage && (
-//         <div className="mt-4 md:mt-0">
-//           <p className="text-gray-500 text-sm mb-2">Preview:</p>
-
-//           <img
-//             src={selectedImage}
-//             alt="Uploaded Preview"
-//             className="w-64 h-64 object-cover rounded-lg shadow-md border"
-//           />
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 "use client";
 
 import { useState } from "react";
@@ -56,11 +11,11 @@ import MarkdownIt from "markdown-it";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
 const ImageTextPrompt = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [imageBase64, setImageBase64] = useState("");
   const [textInput, setTextInput] = useState("");
   const [output, setOutput] = useState("");
-  const [loading, setLoading] = useState(false);
-
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -72,7 +27,10 @@ const ImageTextPrompt = () => {
       const base64 = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(",")[1]);
+        reader.onload = () => {
+          resolve(reader.result.split(",")[1]);
+          setSelectedImage(reader.result);
+        };
         reader.onerror = reject;
       });
       setImageBase64(base64);
@@ -145,7 +103,17 @@ const ImageTextPrompt = () => {
           />
         </label>
       </div>
+      {selectedImage && (
+        <div className="mt-4 md:mt-0">
+          <p className="text-gray-500 text-sm mb-2">Preview:</p>
 
+          <img
+            src={selectedImage}
+            alt="Uploaded Preview"
+            className="w-64 h-64 object-cover rounded-lg shadow-md border"
+          />
+        </div>
+      )}
       {/* Text Input */}
       <div className="mb-4">
         <label className="block font-semibold mb-2" htmlFor="textInput">
@@ -156,7 +124,7 @@ const ImageTextPrompt = () => {
           rows="4"
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
-          className="w-full border rounded px-2 py-1"
+          className="w-full border  px-2 py-1  rounded-md p-1 ring-1 ring-inset ring-primary-light"
         ></textarea>
       </div>
 
@@ -165,25 +133,30 @@ const ImageTextPrompt = () => {
         <button
           onClick={handleGenerate}
           disabled={loading}
-          className={`px-4 py-2 rounded ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
-          }`}
+          className="rounded-md bg-primary-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark disabled:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
         >
           {loading ? "Generating..." : "Generate"}
         </button>
       </div>
 
       {/* Output */}
-      <div className="mt-4">
-        <h2 className="text-xl font-semibold mb-2">Output:</h2>
-        <div
-          id="output"
-          className="border p-4 rounded bg-gray-100"
-          dangerouslySetInnerHTML={{ __html: output }}
-        ></div>
-      </div>
+      {output && (
+        <div className="mt-4">
+          <h2 className="text-xl font-semibold mb-2">Output:</h2>
+          <div
+            id="output"
+            className="border p-4 bg-gray-100 rounded-md  ring-1 ring-inset ring-primary-light"
+            dangerouslySetInnerHTML={{ __html: output }}
+          ></div>
+        </div>
+      )}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50">
+          <div className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg rounded-md p-4 ring-1 ring-inset ring-primary-light">
+            Loading...
+          </div>
+        </div>
+      )}
     </div>
   );
 };

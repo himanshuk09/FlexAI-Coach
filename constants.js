@@ -1,11 +1,11 @@
 export const AI_SOURCES = [
   {
-    value: "openai",
-    title: "OpenAI GPT",
+    value: "diet",
+    title: "Generate Deit Plan",
   },
   {
-    value: "gemini",
-    title: "Google Gemini",
+    value: "exercise",
+    title: "Weekly Exercise",
   },
 ];
 export const GENDERS = [
