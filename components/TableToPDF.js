@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import WeeklyPlan from "@/components/WeeklyPlan";
+import WeeklyPlan from "../components/WeeklyPlan";
 import { BiSolidDownload } from "react-icons/bi";
 
 const TableToPDF = ({ data }) => {
@@ -34,7 +34,7 @@ const TableToPDF = ({ data }) => {
           </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">
             <div ref={pdfContainerRef}>
-              <h1 className={"text-3xl text-center mb-5 "}>
+              <h1 className={"text-3xl text-center mb-5 text-white font-bold"}>
                 Your Weekly Exercise
               </h1>
               <WeeklyPlan data={data} />

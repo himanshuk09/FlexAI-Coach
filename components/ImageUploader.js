@@ -8,6 +8,7 @@ import {
 } from "@google/generative-ai";
 import toast from "react-hot-toast";
 import MarkdownIt from "markdown-it";
+import { BiSolidSend } from "react-icons/bi";
 
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
@@ -107,7 +108,7 @@ const ImageTextPrompt = () => {
     <div className="p-4">
       {/* Image Upload */}
       <div className="mb-4">
-        <label className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg   rounded-md p-1 ring-1 ring-inset ring-primary-light">
+        <label className="cursor-pointer p-2 bg-gradient-to-r text-white  text-transparent font-bold text-lg  hover:bg-white/80 hover:text-black/80 rounded-md  bg-black/50">
           Upload Image
           <input
             type="file"
@@ -119,7 +120,7 @@ const ImageTextPrompt = () => {
       </div>
       {selectedImage && (
         <div className="mt-4 md:mt-0">
-          <p className="text-gray-500 text-sm mb-2">Preview:</p>
+          <p className="text-white text-sm mb-2">Preview:</p>
 
           <img
             src={selectedImage}
@@ -130,7 +131,10 @@ const ImageTextPrompt = () => {
       )}
       {/* Text Input */}
       <div className="mb-4">
-        <label className="block font-semibold mb-2" htmlFor="textInput">
+        <label
+          className="block font-semibold mb-2 text-white"
+          htmlFor="textInput"
+        >
           Ask me :
         </label>
         <textarea
@@ -143,13 +147,21 @@ const ImageTextPrompt = () => {
       </div>
 
       {/* Generate Button */}
-      <div className="mb-4">
+
+      <div className="mt-6 flex items-center justify-end gap-x-6">
         <button
+          type="submit"
           onClick={handleGenerate}
           disabled={loading}
-          className="rounded-md bg-primary-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark disabled:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
+          className="rounded-md bg-black/60 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/90 disabled:bg-black/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          {loading ? "Generating..." : "Generate"}
+          {loading ? (
+            "Generating..."
+          ) : (
+            <div className={"flex justify-center items-center gap-2"}>
+              Generate <BiSolidSend />
+            </div>
+          )}
         </button>
       </div>
 
@@ -167,10 +179,10 @@ const ImageTextPrompt = () => {
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50">
           <div className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg ">
-            <div class="flex justify-center items-center h-screen">
-              <div class="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-purple-500"></div>
-              <div class="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-red-500 ml-3"></div>
-              <div class="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-blue-500 ml-3"></div>
+            <div className="flex justify-center items-center h-screen">
+              <div className="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-purple-500"></div>
+              <div className="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-red-500 ml-3"></div>
+              <div className="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-blue-500 ml-3"></div>
             </div>
           </div>
         </div>

@@ -5,9 +5,10 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google/generative-ai";
+
 import { useState } from "react";
 
-const MODEL_NAME = "gemini-1.0-pro";
+const MODEL_NAME = "gemini-2.0-flash";
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const extractJSON = (output) => {
   // Remove unnecessary characters and newlines
@@ -19,55 +20,59 @@ const extractJSON = (output) => {
   return JSON.parse(json);
 };
 export async function runChat(prompt) {
-  const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+  try {
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
-  const generationConfig = {
-    temperature: 0.9,
-    candidateCount: 1,
-    topK: 1,
-    topP: 1,
-    maxOutputTokens: 2048,
-  };
+    const generationConfig = {
+      temperature: 0.9,
+      candidateCount: 1,
+      topK: 1,
+      topP: 1,
+      maxOutputTokens: 2048,
+    };
 
-  const safetySettings = [
-    {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-  ];
-
-  const chat = model.startChat({
-    generationConfig,
-    safetySettings,
-    history: [
+    const safetySettings = [
       {
-        role: "user",
-        parts: [{ text: "HELLO" }],
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
       },
       {
-        role: "model",
-        parts: [{ text: "Hello there! How can I assist you today?" }],
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
       },
-    ],
-  });
+      {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+    ];
 
-  const result = await chat.sendMessage(prompt);
-  const response = result.response;
-  console.log("response", response);
-  return extractJSON(response.text());
+    const chat = model.startChat({
+      generationConfig,
+      safetySettings,
+      history: [
+        {
+          role: "user",
+          parts: [{ text: "HELLO" }],
+        },
+        {
+          role: "model",
+          parts: [{ text: "Hello there! How can I assist you today?" }],
+        },
+      ],
+    });
+
+    const result = await chat.sendMessage(prompt);
+    const response = result.response;
+    console.log("response", response);
+    return extractJSON(response.text());
+  } catch (error) {
+    console.log("unable to generate ", error);
+  }
 }
 
 const generatePrompt = (userData) => {
