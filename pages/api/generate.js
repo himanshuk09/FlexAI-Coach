@@ -1,5 +1,5 @@
-import { getCompletion } from "@/openAiServices";
-import { generateText } from "@/palm2Services";
+import { getCompletion } from "../../openAiServices";
+import { generateText } from "../../palm2Services";
 
 const generatePrompt = (userData) => {
   return `
