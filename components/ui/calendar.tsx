@@ -119,12 +119,14 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      components={{
-        // You may need to use the appropriate property name for navigation buttons
-        // Check if `prev` and `next` are valid names for the components
-        prev: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        next: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-      }}
+      components={
+        {
+          // You may need to use the appropriate property name for navigation buttons
+          // Check if `prev` and `next` are valid names for the components
+          // prev: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
+          // next: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        }
+      }
       {...props}
     />
   );
