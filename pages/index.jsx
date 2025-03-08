@@ -6,8 +6,7 @@ export default function Home() {
     <div
       className="flex min-h-screen flex-col items-center justify-center p-4 text-center"
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1920&auto=format&fit=crop')",
+        backgroundImage: "url('/images/main.avif')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

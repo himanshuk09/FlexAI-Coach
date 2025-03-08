@@ -16,10 +16,11 @@ import {
   CardFooter,
 } from "../../components/ui/card";
 import { account, ID } from "../api/appwriter";
-
+import { useUser } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 export default function RegisterPage() {
+  const { user, setUser, loading, showLoader, hideLoader } = useUser();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -39,21 +40,23 @@ export default function RegisterPage() {
     console.log(formData);
 
     try {
+      showLoader();
       const response = await account.create(ID.unique(), email, password, name);
       toast.success("Account created successfully.");
       console.log(response);
-      router.push("/exercise");
+      router.push("/home");
     } catch (error: any) {
       toast.error("Account wasn't created successfully");
       console.log(error.message);
+    } finally {
+      hideLoader();
     }
   };
   return (
     <div
       className="flex min-h-screen items-center justify-center p-4"
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1920&auto=format&fit=crop')",
+        backgroundImage: "url('/images/register.avif')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

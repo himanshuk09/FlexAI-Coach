@@ -19,29 +19,32 @@ import {
 import { useRouter } from "next/router"; // Import useRout
 import { account } from "../api/appwriter";
 import toast from "react-hot-toast";
+import { useUser } from "../../context/UserContext";
 export default function LoginPage() {
   const [email, setEmail] = useState<any>("");
   const [password, setPassword] = useState<any>("");
   const router = useRouter(); // Initialize useRouter
-
+  const { user, setUser, loading, showLoader, hideLoader } = useUser();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      showLoader();
       const res = await account.createEmailPasswordSession(email, password);
       toast.success("Logged in successfully");
       console.log(res);
-      router.push("/diet");
+      router.push("/home");
     } catch (error: any) {
       toast.error("Login failed");
       console.log(error.message);
+    } finally {
+      hideLoader();
     }
   };
   return (
     <div
       className="flex min-h-screen items-center justify-center p-4"
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop')",
+        backgroundImage: "url('/images/login-screen.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

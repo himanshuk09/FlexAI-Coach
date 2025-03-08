@@ -8,7 +8,9 @@ import { geminiApiGenerateMsg } from "../geminiAiServices";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { IoNavigate } from "react-icons/io5";
-export default function UserForm({ setData, setLoading, loading }) {
+import { useUser } from "../context/UserContext";
+export default function UserForm({ setData }) {
+  const { user, setUser, logout, loading, showLoader, hideLoader } = useUser();
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [age, setAge] = useState("");
@@ -18,7 +20,7 @@ export default function UserForm({ setData, setLoading, loading }) {
   const router = useRouter(); // Initialize useRouter
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent form submission and page reload
-    setLoading(true);
+    showLoader();
     console.log("handleSubmit");
 
     // Create an object with the form values
@@ -35,13 +37,13 @@ export default function UserForm({ setData, setLoading, loading }) {
 
     if (response) {
       response = await response;
-      setLoading(false);
+      hideLoader();
       setData(response);
       toast.success("Workout generated!");
     } else {
       response = await response;
       console.error("error");
-      setLoading(false);
+      hideLoader();
       toast.error("Failed To Generate");
     }
   };
@@ -55,18 +57,8 @@ export default function UserForm({ setData, setLoading, loading }) {
               "flex justify-center items-center gap-2 text-white text-xl  font-bold"
             }
           >
-            Generate Execise Plan
+            Generate Exercise Plan
           </div>
-          <button
-            type="submit"
-            onClick={() => router.push("/exercise")}
-            disabled={loading}
-            className="rounded-md bg-black/60 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/90 disabled:bg-black/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <div className={"flex justify-center items-center gap-2"}>
-              Generate Execise Plan <IoNavigate />
-            </div>
-          </button>
         </div>
       </div>
 
@@ -145,18 +137,6 @@ export default function UserForm({ setData, setLoading, loading }) {
           )}
         </button>
       </div>
-
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50">
-          <div className="cursor-pointer bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-bold text-lg ">
-            <div className="flex justify-center items-center h-screen">
-              <div className="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-purple-500"></div>
-              <div className="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-red-500 ml-3"></div>
-              <div className="animate-spin ease-linear rounded-full w-10 h-10 border-t-2 border-b-2 border-blue-500 ml-3"></div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
